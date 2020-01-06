@@ -6,7 +6,7 @@ export default reducers => {
     {
       key: 'gitomni',
       storage,
-      whitelist: ['auth', 'user'],
+      whitelist: ['auth', 'teams'],
     },
     reducers
   );

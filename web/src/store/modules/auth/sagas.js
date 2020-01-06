@@ -2,6 +2,7 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { signInSuccess, signFailure } from './actions';
 
+// eslint-disable-next-line import/no-cycle
 import api from '~/services/api';
 import history from '~/services/history';
 
