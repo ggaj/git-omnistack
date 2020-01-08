@@ -17,3 +17,35 @@ export function selectTeam(team) {
     payload: { team },
   };
 }
+
+export function openTeamModal() {
+  return {
+    type: '@teams/OPEN_TEAM_MODAL',
+  };
+}
+
+export function closeTeamModal() {
+  return {
+    type: '@teams/CLOSE_TEAM_MODAL',
+  };
+}
+
+export function createTeamRequest(name) {
+  return {
+    type: '@teams/CREATE_TEAM_REQUEST',
+    payload: { name },
+  };
+}
+
+export function createTeamSuccess(team) {
+  return {
+    type: '@teams/CREATE_TEAM_SUCCESS',
+    payload: { team },
+  };
+}
+
+export function clearTeam() {
+  return {
+    type: '@teams/CLEAR_TEAM',
+  };
+}

@@ -1,5 +1,6 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
+import { clearTeam } from '../teams/actions';
 import { signInSuccess, signFailure } from './actions';
 
 // eslint-disable-next-line import/no-cycle
@@ -13,11 +14,11 @@ export function* signIn({ payload }) {
 
     response = yield call(api.post, 'sessions', { email, password });
 
-    const { token, user } = response.data;
+    const { token } = response.data;
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
-    yield put(signInSuccess(token, user));
+    yield put(signInSuccess(token));
 
     history.push('/');
   } catch (error) {
@@ -55,13 +56,14 @@ export function setToken({ payload }) {
   }
 }
 
-export function signOut() {
-  history.push('/');
+export function* signOut() {
+  yield put(clearTeam());
+  history.push('/signin');
 }
 
 export default all([
   // takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   // takeLatest('@auth/SIGN_UP_REQUEST', signUp),
-  // takeLatest('@auth/SIGN_OUT', signOut),
+  takeLatest('@auth/SIGN_OUT', signOut),
 ]);

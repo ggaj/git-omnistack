@@ -1,10 +1,10 @@
+/* eslint-disable import/no-cycle */
 import { all } from 'redux-saga/effects';
 
-// eslint-disable-next-line import/no-cycle
 import auth from './auth/sagas';
-// eslint-disable-next-line import/no-cycle
 import teams from './teams/sagas';
+import projects from './projects/sagas';
 
 export default function* rootSaga() {
-  return yield all([auth, teams]);
+  return yield all([auth, teams, projects]);
 }
