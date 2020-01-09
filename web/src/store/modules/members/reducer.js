@@ -3,16 +3,15 @@ import produce from 'immer';
 const INITIAL_STATE = {
   members: [],
   memberModalOpen: false,
-  // active: null,
 };
 
 export default function user(state = INITIAL_STATE, action) {
   return produce(state, draft => {
     switch (action.type) {
-      // case '@projects/GET_PROJECT_SUCCESS': {
-      //   draft.projects = action.payload.projects;
-      //   break;
-      // }
+      case '@members/GET_MEMBER_SUCCESS': {
+        draft.members = action.payload.members;
+        break;
+      }
 
       case '@members/OPEN_MEMBER_MODAL': {
         draft.memberModalOpen = true;
@@ -24,12 +23,14 @@ export default function user(state = INITIAL_STATE, action) {
         break;
       }
 
-      // case '@projects/CREATE_PROJECT_SUCCESS': {
-      //   const projects = [...state.projects, action.payload.project];
-      //   draft.projects = projects;
-      //   break;
-      // }
-
+      case '@members/UPDATE_MEMBER_REQUEST': {
+        const { id, roles } = action.payload;
+        const members = state.members.map(member =>
+          member.id === id ? { ...member, roles } : member
+        );
+        draft.members = members;
+        break;
+      }
       default:
     }
   });

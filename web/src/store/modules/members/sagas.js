@@ -1,49 +1,48 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { actions as toastrActions } from 'react-redux-toastr';
-import {
-  getProjectSuccess,
-  createProjectSuccess,
-  closeProjectModal,
-} from './actions';
+import { getMemberSuccess } from './actions';
 
 // eslint-disable-next-line import/no-cycle
 import api from '~/services/api';
 
-export function* projectRequest() {
+export function* membersRequest() {
   try {
-    const response = yield call(api.get, 'projects');
-    yield put(getProjectSuccess(response.data));
+    const response = yield call(api.get, 'members');
+    yield put(getMemberSuccess(response.data));
   } catch (error) {
     yield put(
       toastrActions.add({
         type: 'error',
-        title: 'Projetos',
+        title: 'Membros',
         message: 'Falha ao buscar Dados',
       })
     );
   }
 }
 
-export function* createProjectRequest({ payload }) {
+export function* updateMember({ payload }) {
   try {
-    const { title } = payload;
-
-    const response = yield call(api.post, 'projects', { title });
-
-    yield put(createProjectSuccess(response.data));
-    yield put(closeProjectModal());
+    const { id, roles } = payload;
+    yield call(api.put, `members/${id}`, { roles: roles.map(role => role.id) });
+    yield put(
+      toastrActions.add({
+        type: 'success',
+        title: 'Membro atualizado',
+        message: 'O membro foi atualizado com sucesso',
+      })
+    );
   } catch (error) {
     yield put(
       toastrActions.add({
         type: 'error',
-        title: 'Projetos',
-        message: 'Falha ao inserir project',
+        title: 'Membros',
+        message: 'Falha ao atualizar dados',
       })
     );
   }
 }
 
 export default all([
-  takeLatest('@projects/GET_PROJECT_REQUEST', projectRequest),
-  takeLatest('@projects/CREATE_PROJECT_REQUEST', createProjectRequest),
+  takeLatest('@members/GET_MEMBER_REQUEST', membersRequest),
+  takeLatest('@members/UPDATE_MEMBER_REQUEST', updateMember),
 ]);

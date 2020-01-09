@@ -1,15 +1,15 @@
-// export function getMemberRequest() {
-//   return {
-//     type: '@membros/GET_MEMBER_REQUEST',
-//   };
-// }
+export function getMemberRequest() {
+  return {
+    type: '@members/GET_MEMBER_REQUEST',
+  };
+}
 
-// export function getMemberSuccess(projects) {
-//   return {
-//     type: '@membros/GET_MEMBER_SUCCESS',
-//     payload: { projects },
-//   };
-// }
+export function getMemberSuccess(members) {
+  return {
+    type: '@members/GET_MEMBER_SUCCESS',
+    payload: { members },
+  };
+}
 
 export function openMemberModal() {
   return {
@@ -23,16 +23,9 @@ export function closeMemberModal() {
   };
 }
 
-// export function createProjectRequest(title) {
-//   return {
-//     type: '@membros/CREATE_PROJECT_REQUEST',
-//     payload: { title },
-//   };
-// }
-
-// export function createProjectSuccess(project) {
-//   return {
-//     type: '@membros/CREATE_PROJECT_SUCCESS',
-//     payload: { project },
-//   };
-// }
+export function updateMemberRequest(id, roles) {
+  return {
+    type: '@members/UPDATE_MEMBER_REQUEST',
+    payload: { id, roles },
+  };
+}

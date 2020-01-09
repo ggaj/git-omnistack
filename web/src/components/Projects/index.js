@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 
 import Modal from '../Modal';
+import Members from '../Members';
 
 import {
   getProjectRequest,
@@ -20,6 +21,7 @@ export default function Projects() {
   const dispatch = useDispatch();
   const { active } = useSelector(state => state.teams);
   const { projects, projectModalOpen } = useSelector(state => state.projects);
+  const { memberModalOpen } = useSelector(state => state.members);
 
   useEffect(() => {
     if (active) {
@@ -56,8 +58,8 @@ export default function Projects() {
         </div>
       </header>
       {projects &&
-        projects.map((project, i) => (
-          <Project key={String(i)}>
+        projects.map(project => (
+          <Project key={project.id}>
             <p>{project.title}</p>
           </Project>
         ))}
@@ -77,6 +79,7 @@ export default function Projects() {
           </Form>
         </Modal>
       )}
+      {memberModalOpen && <Members />}
     </Container>
   );
 }
