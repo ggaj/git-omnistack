@@ -29,3 +29,10 @@ export function updateMemberRequest(id, roles) {
     payload: { id, roles },
   };
 }
+
+export function inviteMemberRequest(email) {
+  return {
+    type: '@members/INVITE_MEMBER_REQUEST',
+    payload: { email },
+  };
+}

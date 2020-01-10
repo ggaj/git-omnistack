@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 
 import Modal from '../Modal';
+import Can from '../Can';
 import Members from '../Members';
 
 import {
@@ -53,7 +54,9 @@ export default function Projects() {
       <header>
         <h1>{active.name}</h1>
         <div>
-          <Button onClick={handleOpenProjectModal}>+ Novo</Button>
+          <Can checkPermission="projects_create">
+            <Button onClick={handleOpenProjectModal}>+ Novo</Button>
+          </Can>
           <Button onClick={handleMembers}>Membros</Button>
         </div>
       </header>
