@@ -3,7 +3,8 @@
 const Route = use('Route')
 
 Route.post('sessions', 'SessionController.store').validator('Session')
-Route.post('users', 'UserController.store').validator('User')
+Route.post('users', 'UserController.store')
+// .validator('User')
 
 Route.group(() => {
   Route.get('roles', 'RoleController.index')
