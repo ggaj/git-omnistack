@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { signInRequest } from "../../store/modules/auth/actions";
 
 import {
   View,
@@ -11,61 +13,56 @@ import {
 
 import styles from './styles';
 
-export default class SignIn extends Component {
-  state = {
-    email : '',
-    password : ''
-  }
+export default function SignIn() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [elPassword, setElPassword] = useState('')
+  const dispacth = useDispatch()
 
   handleSubmit = () => {
-    const { email, password } = this.state
+    dispacth(signInRequest(email, password))
   };
 
-  render(){
+  return(
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      style={styles.container}
+    >
+      <View>
+        <Text style={styles.title}>Entrar</Text>
 
-    const { email, password } = this.state
+        <Text style={styles.label}>E-mail</Text>
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          autoFocus
+          returnKeyType="next"
+          onSubmitEditing={() => elPassword.focus()}
+        />
 
-    return(
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        style={styles.container}
-      >
-        <View>
-          <Text style={styles.title}>Entrar</Text>
+        <Text style={styles.label}>Senha</Text>
+        <TextInput
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+          secureTextEntry
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          returnKeyType="send"
+          ref={setElPassword}
+          onSubmitEditing={handleSubmit}
+        />
 
-          <Text style={styles.label}>E-mail</Text>
-          <TextInput
-            value={email}
-            onChangeText={text => this.setState({email: text})}
-            style={styles.input}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            autoFocus
-            returnKeyType="next"
-            onSubmitEditing={() => this.passwordInput.focus()}
-          />
-
-          <Text style={styles.label}>Senha</Text>
-          <TextInput
-            value={password}
-            onChangeText={text => this.setState({password: text})}
-            style={styles.input}
-            secureTextEntry
-            autoCapitalize="none"
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            returnKeyType="send"
-            ref={el => {this.passwordInput = el}}
-            onSubmitEditing={this.handleSubmit}
-          />
-
-          <TouchableOpacity onPress={() => {}} style={styles.button}>
-            <Text style={styles.buttonText}>Entrar</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    );
-  }
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
 }

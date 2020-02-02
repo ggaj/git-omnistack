@@ -1,12 +1,11 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { ToastActionsCreators } from "react-native-redux-toast";
 import {
   getProjectSuccess,
   createProjectSuccess,
   closeProjectModal,
 } from './actions';
 
-// eslint-disable-next-line import/no-cycle
 import api from '~/services/api';
 
 export function* projectRequest() {
@@ -14,13 +13,7 @@ export function* projectRequest() {
     const response = yield call(api.get, 'projects');
     yield put(getProjectSuccess(response.data));
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Projetos',
-        message: 'Falha ao buscar Dados',
-      })
-    );
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 
@@ -33,13 +26,7 @@ export function* createProjectRequest({ payload }) {
     yield put(createProjectSuccess(response.data));
     yield put(closeProjectModal());
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Projetos',
-        message: 'Falha ao inserir project',
-      })
-    );
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 

@@ -1,5 +1,5 @@
 module.exports = {
   "singleQuote": true,
   "--single-quote":true,
-  "trailingComma": "es5"  
-};
+  "trailingComma": "es5"
+}

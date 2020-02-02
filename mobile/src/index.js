@@ -1,13 +1,24 @@
 import React from 'react';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-import './config/StatusBarConfig';
+import { StatusBar } from 'react-native';
+import { Toast } from 'react-native-redux-toast'
 
-import Routes from './routes';
-import store from './store';
+import './config/ReactotronConfig';
 
-const Root = () => 
-<Provider store={store}>
-  <Routes />;
-</Provider>
+import { colors } from './styles';
 
-export default Root;
+import { store, persistor } from './store';
+import App from './App';
+
+export default function Index() {
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.background} />
+        <App />
+        <Toast />
+      </PersistGate>
+    </Provider>
+  );
+}

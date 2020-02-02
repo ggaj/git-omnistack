@@ -1,10 +1,8 @@
-/* eslint-disable no-useless-return */
 import { takeLatest, call, put, all, select } from 'redux-saga/effects';
-import { actions as toastrActions } from 'react-redux-toastr';
-import { clearTeam } from '../teams/actions';
-import { signInSuccess, signFailure, getPermissionsSuccess } from './actions';
+import NavigationService from "../../../services/navigation";
+import { ToastActionsCreators } from "react-native-redux-toast";
+import { signInSuccess, getPermissionsSuccess } from './actions';
 
-// eslint-disable-next-line import/no-cycle
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -13,23 +11,14 @@ export function* signIn({ payload }) {
     const { email, password } = payload;
 
     const response = yield call(api.post, 'sessions', { email, password });
-
     const { token } = response.data;
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
-
     yield put(signInSuccess(token));
-
-    history.push('/');
+    NavigationService.navigate('Main')
+    
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Falha no Login',
-        message: 'Verifique seu email/senha!',
-      })
-    );
-    yield put(signFailure());
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 
@@ -47,14 +36,7 @@ export function* signUp({ payload }) {
 
     history.push('/');
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Falha no cadastro',
-        message: 'Você foi convidado para algum time?',
-      })
-    );
-    yield put(signFailure());
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 
@@ -69,8 +51,8 @@ export function setToken({ payload }) {
 }
 
 export function* signOut() {
-  yield put(clearTeam());
-  history.push('/signin');
+  // yield put(clearTeam());
+  // history.push('/signin');
 }
 
 export function* getPermissions() {
@@ -86,19 +68,13 @@ export function* getPermissions() {
     console.tron.log(roles, permissions);
     yield put(getPermissionsSuccess(roles, permissions));
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Configurador',
-        message: 'Falha ao obter configurador',
-      })
-    );
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 
 export default all([
   // takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
-  takeLatest('@auth/SIGN_UP_REQUEST', signUp),
-  takeLatest('@auth/SIGN_OUT', signOut),
+  // takeLatest('@auth/SIGN_UP_REQUEST', signUp),
+  // takeLatest('@auth/SIGN_OUT', signOut),
 ]);

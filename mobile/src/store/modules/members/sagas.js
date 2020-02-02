@@ -1,8 +1,7 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { ToastActionsCreators } from "react-native-redux-toast";
 import { getMemberSuccess, closeMemberModal } from './actions';
 
-// eslint-disable-next-line import/no-cycle
 import api from '~/services/api';
 
 export function* membersRequest() {
@@ -10,13 +9,7 @@ export function* membersRequest() {
     const response = yield call(api.get, 'members');
     yield put(getMemberSuccess(response.data));
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Membros',
-        message: 'Falha ao buscar Dados',
-      })
-    );
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 
@@ -24,21 +17,9 @@ export function* updateMember({ payload }) {
   try {
     const { id, roles } = payload;
     yield call(api.put, `members/${id}`, { roles: roles.map(role => role.id) });
-    yield put(
-      toastrActions.add({
-        type: 'success',
-        title: 'Membro atualizado',
-        message: 'O membro foi atualizado com sucesso',
-      })
-    );
+    yield put(ToastActionsCreators.displayInfo('Membro atualizado com sucesso'))
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Membros',
-        message: 'Falha ao atualizar dados',
-      })
-    );
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 
@@ -47,21 +28,9 @@ export function* inviteMember({ payload }) {
     const { email } = payload;
     yield call(api.post, 'invites', { invites: [email] });
     yield put(closeMemberModal());
-    yield put(
-      toastrActions.add({
-        type: 'success',
-        title: 'Convite enviado',
-        message: 'Enviamos um convite ao usuário para participar do time',
-      })
-    );
+    yield put(ToastActionsCreators.displayInfo('Enviamos um convite para participar do time'))
   } catch (error) {
-    yield put(
-      toastrActions.add({
-        type: 'error',
-        title: 'Convite',
-        message: 'Falha no envio do convite ao usuário',
-      })
-    );
+    yield put(ToastActionsCreators.displayError(error.message))
   }
 }
 

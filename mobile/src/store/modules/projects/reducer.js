@@ -3,7 +3,6 @@ import produce from 'immer';
 const INITIAL_STATE = {
   projects: [],
   projectModalOpen: false,
-  // active: null,
 };
 
 export default function user(state = INITIAL_STATE, action) {
